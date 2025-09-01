@@ -13,6 +13,9 @@ type order struct {
 	createdAt time.Time // nanosecond precision
 }
 
+type payment struct{}
+type razorpay struct{}
+
 func main() {
 
 	// Pointers
@@ -43,6 +46,10 @@ func main() {
 		isGood bool
 	}{name: "English", isGood: true}
 	fmt.Println(language)
+
+	// Interface
+	newPayment := payment{}
+	newPayment.makePayment(100)
 }
 
 func changeNum(num *int) {
@@ -61,4 +68,13 @@ func NewOrder(id string, amount float32, status string) *order {
 		status: status,
 	}
 	return &order
+}
+
+func (p payment) makePayment(amount float32) {
+	razorpayGateway := razorpay{}
+	razorpayGateway.pay(amount)
+}
+
+func (r razorpay) pay(amount float32) {
+	fmt.Println("Payment ==> ", amount)
 }
