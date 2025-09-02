@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"github.com/MayurakshaSikdar/golang-tutorial/project-api/internal/config"
+	"github.com/MayurakshaSikdar/golang-tutorial/project-api/internal/http/handlers/student"
+	"github.com/slayer/autorestart"
 )
 
 func main() {
@@ -21,9 +23,7 @@ func main() {
 	// database setup
 	// setup router
 	router := http.NewServeMux()
-	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Welcome..."))
-	})
+	router.HandleFunc("POST /api/students", student.New())
 	// setup server
 	server := http.Server{
 		Addr:    cfg.Address,
@@ -33,6 +33,7 @@ func main() {
 
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	autorestart.StartWatcher()
 	go func() {
 		server.ListenAndServe()
 	}()
