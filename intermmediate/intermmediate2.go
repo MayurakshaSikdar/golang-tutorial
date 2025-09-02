@@ -29,28 +29,34 @@ func main() {
 }
 
 func add(a int, b int) int {
+	fmt.Println("### Inside `add`... ###")
 	return a + b
 }
 
 func substract(a, b int) int { // only single time Int is needed.
+	fmt.Println("### Inside `substract`... ###")
 	return a - b
 }
 
 func languages() (string, string, string) {
+	fmt.Println("### Inside `languages`... ###")
 	return "golang", "python", "JS"
 }
 
 func process(fn func(a int) int) {
+	fmt.Println("### Inside `process`... ###")
 	fn(1)
 }
 
 func processit() func(a int) int {
+	fmt.Println("### Inside `processit`... ###")
 	return func(a int) int {
 		return 4
 	}
 }
 
 func summation(nums ...int) int {
+	fmt.Println("### Inside `summation`... ###")
 	var total int
 	total = 0
 	for _, n := range nums {
@@ -60,6 +66,7 @@ func summation(nums ...int) int {
 }
 
 func counter() func() int {
+	fmt.Println("### Inside `counter`... ###")
 	var count int = 0
 	return func() int {
 		count += 1

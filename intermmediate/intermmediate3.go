@@ -13,8 +13,38 @@ type order struct {
 	createdAt time.Time // nanosecond precision
 }
 
-type payment struct{}
+type paymenter interface {
+	pay(amount float32)
+	refund(amount float32, account string)
+}
+
+type payment struct {
+	gateway paymenter
+}
+
+func (p payment) makePayment(amount float32) {
+	p.gateway.pay(amount)
+}
+
 type razorpay struct{}
+
+func (r razorpay) pay(amount float32) {
+	fmt.Println("making payment using razorpay", amount)
+}
+
+type fakepayment struct{}
+
+func (f fakepayment) pay(amount float32) {
+	fmt.Println("making payment using fake gateway for testing purpose")
+}
+
+type paypal struct{}
+
+func (p paypal) pay(amount float32) {
+	fmt.Println("making payment using paypal", amount)
+}
+
+func (p paypal) refund(amount float32, account string) {}
 
 func main() {
 
@@ -48,20 +78,26 @@ func main() {
 	fmt.Println(language)
 
 	// Interface
-	newPayment := payment{}
-	newPayment.makePayment(100)
+	newPaymentGw := paypal{}
+	newPay := payment{
+		gateway: newPaymentGw,
+	}
+	newPay.makePayment(100)
 }
 
 func changeNum(num *int) {
+	fmt.Println("### Inside `changeNum`... ###")
 	*num = 5
 	fmt.Println("Change Num => ", *num)
 }
 
 func (o *order) changeStatus(status string) {
+	fmt.Println("### Inside `changeStatus`... ###")
 	o.status = status
 }
 
 func NewOrder(id string, amount float32, status string) *order {
+	fmt.Println("### Inside `NewOrder`... ###")
 	order := order{
 		id:     id,
 		amount: amount,
@@ -70,11 +106,7 @@ func NewOrder(id string, amount float32, status string) *order {
 	return &order
 }
 
-func (p payment) makePayment(amount float32) {
-	razorpayGateway := razorpay{}
-	razorpayGateway.pay(amount)
-}
-
-func (r razorpay) pay(amount float32) {
-	fmt.Println("Payment ==> ", amount)
+func (p payment) pay(amount float32) {
+	fmt.Println("### Inside `pay`... ###")
+	p.gateway.pay(amount)
 }
