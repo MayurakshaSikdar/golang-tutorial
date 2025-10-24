@@ -1,5 +1,9 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/golang-samples/gopher-vector/master/gopher.png" align="center" width="30%">
+    <img src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white" />
+    <img src="https://img.shields.io/badge/Golang_Tutorial-Expert_Guide-007D9C?style=for-the-badge&logo=go&logoColor=white" >
+</p>
+<p align="center">
+    <img src="https://raw.githubusercontent.com/golang-samples/gopher-vector/master/gopher.png" align="center" width="15%">
 </p>
 <p align="center"><h1 align="center">GOLANG-TUTORIAL</h1></p>
 <p align="center">
