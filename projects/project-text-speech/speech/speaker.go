@@ -67,3 +67,12 @@ func NewRequest(text string, opt *SpeechOptions) *texttospeechpb.SynthesizeSpeec
 		},
 	}
 }
+
+func (s *Speaker) Run(ctx context.Context, req *texttospeechpb.SynthesizeSpeechRequest) ([]byte, error) {
+	resp, err := s.client.SynthesizeSpeech(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.AudioContent, nil
+}

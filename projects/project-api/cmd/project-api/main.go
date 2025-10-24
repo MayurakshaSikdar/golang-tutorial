@@ -12,6 +12,7 @@ import (
 
 	"github.com/MayurakshaSikdar/golang-tutorial/project-api/internal/config"
 	"github.com/MayurakshaSikdar/golang-tutorial/project-api/internal/http/handlers/student"
+	"github.com/MayurakshaSikdar/golang-tutorial/project-api/internal/storage/sqlite"
 	"github.com/slayer/autorestart"
 )
 
@@ -21,9 +22,16 @@ func main() {
 	cfg := config.MustLoad()
 	fmt.Println(cfg)
 	// database setup
+	storage, err := sqlite.New(cfg)
+	if err != nil {
+		slog.Error("Error connecting Sqlite database.")
+	}
+	slog.Info("Storage initialised", slog.String("env", cfg.Env), slog.String("version", "1.0.0"))
 	// setup router
 	router := http.NewServeMux()
-	router.HandleFunc("POST /api/students", student.New())
+	router.HandleFunc("POST /api/students", student.New(storage))
+	router.HandleFunc("GET /api/students/{id}", student.GetById(storage))
+	router.HandleFunc("GET /api/students", student.GetList(storage))
 	// setup server
 	server := http.Server{
 		Addr:    cfg.Address,
